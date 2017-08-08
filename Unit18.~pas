@@ -1,0 +1,27 @@
+unit Unit18;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, unit2, CurvyControls, StdCtrls, rtflabel;
+
+type
+  TForm18 = class(TForm)
+    GroupBox1: TGroupBox;
+    RTFLabel1: TRTFLabel;
+    CurvyEdit1: TCurvyEdit;
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  Form18: TForm18;
+
+implementation
+
+{$R *.dfm}
+
+end.

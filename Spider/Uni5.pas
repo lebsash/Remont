@@ -1,0 +1,177 @@
+unit Uni5;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, ComCtrls, Buttons, Mask,  DB, unit3, IBCustomDataSet,
+  IBQuery;
+
+type
+  TForm2 = class(TForm)
+    GroupBox1: TGroupBox;
+    StatusBar1: TStatusBar;
+    Label1: TLabel;
+    Edit1: TEdit;
+    Edit2: TEdit;
+    Label2: TLabel;
+    GroupBox2: TGroupBox;
+    Label3: TLabel;
+    Edit3: TEdit;
+    Label4: TLabel;
+    Edit4: TEdit;
+    Label5: TLabel;
+    MaskEdit1: TMaskEdit;
+    Edit5: TEdit;
+    Label6: TLabel;
+    GroupBox3: TGroupBox;
+    Label7: TLabel;
+    Edit6: TEdit;
+    SpeedButton1: TSpeedButton;
+    SpeedButton2: TSpeedButton;
+    IBQuery1: TIBQuery;
+    SpeedButton3: TSpeedButton;
+    IBQuery1TIMER: TIntegerField;
+    IBQuery1FILE_SEND: TIBStringField;
+    IBQuery1FTPHOST: TIBStringField;
+    IBQuery1FTPLOGIN: TIBStringField;
+    IBQuery1FTPPASSWORD: TIBStringField;
+    IBQuery1ABOUT: TIBStringField;
+    IBQuery1FL1: TIntegerField;
+    IBQuery1FL2: TIntegerField;
+    IBQuery1FL3: TIntegerField;
+    IBQuery2: TIBQuery;
+    OpenDialog1: TOpenDialog;
+    OpenDialog2: TOpenDialog;
+    procedure SpeedButton3Click(Sender: TObject);
+    procedure Edit5Change(Sender: TObject);
+    procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
+    procedure Edit6KeyPress(Sender: TObject; var Key: Char);
+    procedure SpeedButton1Click(Sender: TObject);
+    procedure SpeedButton2Click(Sender: TObject);
+    procedure Edit1Change(Sender: TObject);
+    procedure Edit2Change(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  Form2: TForm2;
+
+implementation
+uses main;
+var zap: integer;
+{$R *.dfm}
+
+procedure TForm2.SpeedButton3Click(Sender: TObject);
+var f:textfile;
+    z:string;
+begin
+zap:=1;
+if main.Form1.StatusBar1.Panels[0].Text='Соединились с БД' then
+begin
+
+ IBQuery1.SQL.Clear;
+ IBQuery1.SQL.Append('select * from OPT');
+ IBQuery1.Close;
+ IBQuery1.Open;
+ IBQuery1.First;
+ Edit3.Text:=IBQuery1FILE_SEND.AsString;
+ Edit4.Text:=IBQuery1FTPLOGIN.AsString;
+ MaskEdit1.Text:=IBQuery1FTPPASSWORD.AsString;
+ Edit5.Text:=IBQuery1FTPHOST.AsString;
+ Edit6.Text:=IBQuery1TIMER.AsString;
+
+ AssignFile (f,'dbconnect.ini');
+ Reset(f);
+ Readln(f,z);
+ Edit1.Text:=z;
+ Readln(f,z);
+ Edit2.Text:=z;
+ CloseFile(f);
+
+ end;
+end;
+
+procedure TForm2.Edit5Change(Sender: TObject);
+begin
+ zap:=2;
+end;
+
+procedure TForm2.FormCloseQuery(Sender: TObject; var CanClose: Boolean);
+var f:textfile;
+begin
+ if zap=2 then
+    begin
+      // Сохраняем изменения
+    if main.Form1.StatusBar1.Panels[0].Text='Соединились с БД' then  begin
+       IBQuery2.SQL.Clear;
+       IBQuery2.SQL.Append('UPDATE OPT SET FILE_SEND=:FILE_SEND, FTPHOST=:FTPHOST, FTPLOGIN=:FTPLOGIN, FTPPASSWORD=:FTPPASSWORD, TIMER=:TIMER WHERE FL1=:FL1');
+       IBQuery2.ParamByName('FILE_SEND').AsString:=Edit3.Text;
+       IBQuery2.ParamByName('FTPHOST').AsString:=Edit5.Text;
+       IBQuery2.ParamByName('FTPLOGIN').AsString:=Edit4.Text;
+       IBQuery2.ParamByName('FTPPASSWORD').AsString:=MaskEdit1.Text;
+       IBQuery2.ParamByName('TIMER').AsString:=Edit6.Text;
+       IBQuery2.ParamByName('FL1').AsInteger:=911;
+       IBQuery2.Close;
+       IBQuery2.Open;
+     end;
+       main.TIMER:=strtoint(Edit6.Text);
+       main.FILE_SEND:=Edit3.Text;
+       main.FTPHOST:=Edit5.Text;
+       main.FTPLOGIN:=Edit4.Text;
+       main.FTPPASSWORD:=MaskEdit1.Text;
+
+
+       // Сохраним в файл
+       AssignFile(f,'dbconnect.ini');
+       Rewrite (f);
+       Append(f);
+       Writeln(f,Edit1.text);
+       Writeln (f,Edit2.text);
+       CloseFile(f);
+
+         unit3.DataModule3.IBDataBase1.DatabaseName:=Edit1.Text;
+
+         unit3.DataModule3.IBDataBase2.DatabaseName:=Edit2.Text;
+    end;
+end;
+
+procedure TForm2.Edit6KeyPress(Sender: TObject; var Key: Char);
+begin
+case Key of
+  #8,'0'..'9' :  ; // цифры и <Back Space>
+
+
+ 
+        else   // остальные символы запрещены
+               key := Chr(0)
+ end;
+end;
+
+procedure TForm2.SpeedButton1Click(Sender: TObject);
+begin
+if OpenDialog1.Execute
+then Edit1.Text :='127.0.0.1:'+ExtractFilePath(OpenDialog1.FileName)+ExtractFileName(OpenDialog1.FileName);
+
+end;
+
+procedure TForm2.SpeedButton2Click(Sender: TObject);
+begin
+if OpenDialog2.Execute
+then Edit2.Text :='127.0.0.1:'+ExtractFilePath(OpenDialog2.FileName)+ExtractFileName(OpenDialog2.FileName);
+end;
+
+procedure TForm2.Edit1Change(Sender: TObject);
+begin
+ zap:=2;
+end;
+
+procedure TForm2.Edit2Change(Sender: TObject);
+begin
+ zap:=2;
+end;
+
+end.

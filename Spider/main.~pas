@@ -1,0 +1,590 @@
+unit main;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, Buttons, IdFTP, IdBaseComponent, IdComponent, IdTCPConnection,
+  IdTCPClient, ComCtrls, ExtCtrls, AdvSmoothLabel,  unit4, DB,
+  IBCustomDataSet, IBQuery, StdCtrls, Grids, AdvObj, BaseGrid, AdvGrid,
+  DBAdvGrid, DateUtils, ImgList, CoolTrayIcon, Menus;
+
+type
+  TForm1 = class(TForm)
+    SpeedButton1: TSpeedButton;
+    IdFTP1: TIdFTP;
+    STARTFB: TTimer;
+    StatusBar1: TStatusBar;
+    AdvSmoothLabel2: TAdvSmoothLabel;
+    Timer1: TTimer;
+    Button1: TButton;
+    IBQuery1: TIBQuery;
+    IBQuery2: TIBQuery;
+    IBQuery2ID_ZAKAZ: TIntegerField;
+    IBQuery2CODE_USTR: TIBStringField;
+    IBQuery2WORK: TIBStringField;
+    IBQuery2CENA: TFloatField;
+    IBQuery2KOL_VO: TIntegerField;
+    IBQuery2SUMMA: TFloatField;
+    IBQuery2FL_SOGLASOVANO: TIntegerField;
+    IBQuery2FL_GOTOVO: TIntegerField;
+    IBQuery2FL_VIDANO: TIntegerField;
+    IBQuery2DATA_SOGLASOVANO: TDateTimeField;
+    IBQuery2DATA_GOTOVO: TDateTimeField;
+    IBQuery2DATA_VIDANO: TDateTimeField;
+    IBQuery2FL_UPDATE: TIntegerField;
+    IBQuery2DATA_ZAKAZ: TDateTimeField;
+    IBQuery2CODE_WORK: TIBStringField;
+    IBQuery3: TIBQuery;
+    IBQuery4: TIBQuery;
+    IBQuery5: TIBQuery;
+    Memo1: TMemo;
+    SpeedButton3: TSpeedButton;
+    IBQuery6: TIBQuery;
+    IBQuery1ID: TIntegerField;
+    IBQuery1USTR_CODE: TIBStringField;
+    IBQuery1USTR_NAME: TIBStringField;
+    IBQuery1USTR_TIPE: TIBStringField;
+    IBQuery1SERIAL: TIBStringField;
+    IBQuery1ABOUT: TIBStringField;
+    IBQuery1FL_GOTOVO: TIntegerField;
+    IBQuery1FL_SOGLASOVANO: TIntegerField;
+    IBQuery1FL_VIDANO: TIntegerField;
+    IBQuery1ID_SHAPKA: TIntegerField;
+    IBQuery1DAT_SOGL: TDateTimeField;
+    IBQuery1DAT_GOTOVO: TDateTimeField;
+    IBQuery1DAT_VIDANO: TDateTimeField;
+    IBQuery3ID_ITEM: TIntegerField;
+    IBQuery3ID_SHAPKA: TIntegerField;
+    IBQuery3TODO_NAME: TIBStringField;
+    IBQuery3TODO_ID: TIntegerField;
+    IBQuery3TODO_COST: TFloatField;
+    IBQuery3KOL_VO: TIntegerField;
+    IBQuery3TOTAL_COST: TFloatField;
+    IBQuery3FL_GOTOVO: TIntegerField;
+    IBQuery3FL_SOGLASOVANO: TIntegerField;
+    IBQuery3ID_SHAPKA1: TIntegerField;
+    IBQuery3ID_CLIENT: TIntegerField;
+    IBQuery3DATA_GET: TDateTimeField;
+    IBQuery3DATA_KRAY: TDateTimeField;
+    IBQuery3DATA_END: TDateTimeField;
+    IBQuery3F_STATUS: TIntegerField;
+    IBQuery3F_KORRECT: TIntegerField;
+    IBQuery3ID_MASTER: TIntegerField;
+    IBQuery3ID_MANAGER: TIntegerField;
+    IBQuery3ID_SERVICE: TIntegerField;
+    IBQuery3N_1C: TIBStringField;
+    IBQuery3F_CLIENT: TIntegerField;
+    IBQuery3ABOUT: TIBStringField;
+    IBQuery3F_SOGL_C: TIntegerField;
+    IBQuery3F_SOGL_V: TIntegerField;
+    IBQuery3F_SOGL_T: TIntegerField;
+    IBQuery3F_REZ_C: TIntegerField;
+    IBQuery3F_REZ_O: TIntegerField;
+    IBQuery3NOM_KARTA: TIBStringField;
+    IBQuery3FL_GOTOVO1: TIntegerField;
+    IBQuery3FL_SOGLASOVANO1: TIntegerField;
+    IBQuery3FL_VIDANO: TIntegerField;
+    IBQuery3FL_VRABOTA: TIntegerField;
+    IBQuery3HHH: TIBStringField;
+    IBQuery3DAT_SOGL: TDateTimeField;
+    IBQuery3DAT_GOTOVO: TDateTimeField;
+    IBQuery3DAT_VIDANO: TDateTimeField;
+    SpeedButton4: TSpeedButton;
+    IBQuery7: TIBQuery;
+    IBQuery7ID_ZAKAZ: TIntegerField;
+    IBQuery7CODE_USTR: TIBStringField;
+    IBQuery7WORK: TIBStringField;
+    IBQuery7CENA: TFloatField;
+    IBQuery7KOL_VO: TIntegerField;
+    IBQuery7SUMMA: TFloatField;
+    IBQuery7FL_SOGLASOVANO: TIntegerField;
+    IBQuery7FL_GOTOVO: TIntegerField;
+    IBQuery7FL_VIDANO: TIntegerField;
+    IBQuery7DATA_SOGLASOVANO: TDateTimeField;
+    IBQuery7DATA_GOTOVO: TDateTimeField;
+    IBQuery7DATA_VIDANO: TDateTimeField;
+    IBQuery7FL_UPDATE: TIntegerField;
+    IBQuery7DATA_ZAKAZ: TDateTimeField;
+    IBQuery7CODE_WORK: TIBStringField;
+    IBQuery8: TIBQuery;
+    SpeedButton2: TSpeedButton;
+    ImageList1: TImageList;
+    IBQuery9: TIBQuery;
+    IBQuery9TIMER: TIntegerField;
+    IBQuery9FILE_SEND: TIBStringField;
+    IBQuery9FTPHOST: TIBStringField;
+    IBQuery9FTPLOGIN: TIBStringField;
+    IBQuery9FTPPASSWORD: TIBStringField;
+    IBQuery9ABOUT: TIBStringField;
+    IBQuery9FL1: TIntegerField;
+    IBQuery9FL2: TIntegerField;
+    IBQuery9FL3: TIntegerField;
+    AdvSmoothLabel1: TAdvSmoothLabel;
+    AdvSmoothLabel3: TAdvSmoothLabel;
+    CoolTrayIcon1: TCoolTrayIcon;
+    PopupMenu1: TPopupMenu;
+    N1: TMenuItem;
+    N2: TMenuItem;
+    N3: TMenuItem;
+    IBQuery2NAME_ITEM: TIBStringField;
+    IBQuery7NAME_ITEM: TIBStringField;
+    SpeedButton5: TSpeedButton;
+    IBQuery10: TIBQuery;
+    IBQuery10ID: TIntegerField;
+    IBQuery10ID_RAZDEL: TIntegerField;
+    IBQuery10ARTICUL: TIBStringField;
+    IBQuery10NAME: TIBStringField;
+    IBQuery10COST: TFloatField;
+    IBQuery10ABOUT: TIBStringField;
+    IBQuery10LONG_TIME: TIBStringField;
+    IBQuery10US_MASTER_ID: TIntegerField;
+    IBQuery10ID1: TIntegerField;
+    IBQuery10RAZDEL: TIBStringField;
+    IBQuery10ABOUT1: TIBStringField;
+    procedure SpeedButton1Click(Sender: TObject);
+    procedure STARTFBTimer(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+    procedure Button1Click(Sender: TObject);
+    procedure SpeedButton3Click(Sender: TObject);
+    procedure SpeedButton4Click(Sender: TObject);
+    procedure SpeedButton2Click(Sender: TObject);
+    procedure Timer1Timer(Sender: TObject);
+    procedure CoolTrayIcon1Click(Sender: TObject);
+    procedure N1Click(Sender: TObject);
+    procedure N3Click(Sender: TObject);
+    procedure SpeedButton5Click(Sender: TObject);
+  private
+    { Private declarations }
+ //   procedure FTPUpload();
+  public
+    { Public declarations }
+    Thread1: TSimpleThread;
+  end;
+
+var
+  Form1: TForm1;
+var Flag_WORK_thrd, TIMER: integer;
+    NUM_LOGIN : integer;
+    FILE_SEND, FTPHOST, FTPLOGIN, FTPPASSWORD : string;
+
+
+implementation
+
+uses Unit3, Uni5;
+var err: integer;
+
+{$R *.dfm}
+
+
+procedure FTPUpload(put:string);
+var IdFTP:TIdFtp; //Объект для работы с FTP
+begin
+err:=0;
+  try
+    IdFTP:=TIdFTP.Create(nil); //Создаем объект в памяти
+    //Если соединение уже установлено - обрываем его.
+    //Конечно, для данного случая эта проверка избыточна
+    //Ведь мы только что создали объект IdFTP и никуда
+    //еще не соединялись. 
+    If IdFTP.Connected then 
+    Begin
+       IdFTP.Abort;
+       IdFTP.Quit;
+    End; 
+    //Задаем параметры доступа к серверу
+    // ftp://st911:U6aum_(.kv$}@178.162.184.142
+    IdFTP.Username := main.FTPLOGIN; //Здесь имя FTP юзера
+    IdFTP.Password := main.FTPPASSWORD; //Здесь его пароль
+    IdFTP.Host := main.FTPHOST; //Здесь адрес сервера
+    //Можно еще порт задать
+    try
+       IdFTP.Connect; //Соединяемся
+       If IdFTP.Connected then 
+       Begin
+          IdFTP.ChangeDir('/sp/');          //Переходим на FTP в нужную папку
+          IdFTP.Put(put, put);          //Скопировать файл C:\file1.gif в текущую папку FTP вервера
+          //IdFTP.Put('C:\file2.gif', 'file2.gif');
+          IdFTP.Quit; //Завершаем соединение
+       End;
+       //Memo1.Lines.Append ('Загрузка файла на сервер завершена.');       //показываем сообщение
+       except
+          err:=1;
+          //ShowMessage('Ошибка при загрузке файла на сервер.');//показываем сообщение
+       end;
+   finally
+      IdFTP.Free; //Удаляем объект из памяти
+   end;
+end;
+
+
+procedure TForm1.SpeedButton1Click(Sender: TObject);
+begin
+form2.SpeedButton3.Click;
+Form2.showmodal;
+end;
+
+procedure TForm1.STARTFBTimer(Sender: TObject);
+var er, er1:string;
+    a, b, i: integer;
+begin
+// Если подключение не установлено - запускаем поток с попытками
+// Если коннекта с фаербердом нет, но сервисы стартовали - коннектим фаеберд
+if (unit3.FLAG_DB_CONNECT=0) then
+  begin
+
+
+     StatusBar1.Panels[0].Text:='Ошибка соединения с БД';
+     AdvSmoothLabel2.Caption.Text:='Ошибка соединения с БД';
+
+     if Flag_WORK_thrd=0 then begin
+        Flag_WORK_thrd:=1;
+        StatusBar1.Panels[0].Text:='Соединяюсь с БД';
+        AdvSmoothLabel2.Caption.Text:='Соединяюсь с БД';
+        Thread1 :=TSimpleThread.Create(true);
+        Thread1.FreeOnTerminate:=true;
+        Thread1.Priority := tpLowest;
+        Thread1.Resume;
+      end;
+  end
+  else begin
+          STARTFB.Enabled:=false;
+         // SpeedButton1.Enabled:=true;
+
+          StatusBar1.Panels[0].Text:='Соединились с БД';
+          AdvSmoothLabel2.Caption.Text:='Соединились с БД';
+            NUM_LOGIN:=0;
+            i:=1;
+
+            IBQuery9.SQL.Clear;
+            IBQuery9.SQL.Append('select * from OPT WHERE FL1=:FL1');
+            IBQuery9.ParamByName('FL1').AsInteger:=911;
+            IBQuery9.Close;
+            IBQuery9.Open;
+            IBQuery9.First;
+            main.TIMER:=IBQuery9TIMER.AsInteger;
+            main.FTPHOST:=IBQuery9FTPHOST.AsString;
+            main.FTPLOGIN:=IBQuery9FTPLOGIN.AsString;
+            main.FTPPASSWORD:=IBQuery9FTPPASSWORD.AsString;
+            SpeedButton2.Click;
+    end;
+
+
+
+end;
+
+procedure TForm1.FormCreate(Sender: TObject);
+begin
+AdvSmoothLabel1.Caption.Text:='';
+AdvSmoothLabel2.Caption.Text:='';
+AdvSmoothLabel3.Caption.Text:='';
+    if unit3.FLAG_DB_CONNECT=0 then
+       begin
+       main.TIMER:=10000;
+       main.FILE_SEND:='';
+       main.FTPHOST:='';
+       main.FTPLOGIN:='';
+       main.FTPPASSWORD:='';
+       memo1.Lines.Clear;
+       end;
+end;
+
+procedure TForm1.Button1Click(Sender: TObject);
+var obn: integer;
+begin
+obn:=0;
+
+Memo1.Lines.Append(datetostr(now())+','+timetostr(time)+': Начинаем сверку данных');
+unit3.DataModule3.IBDatabase1.Connected:=false;
+unit3.DataModule3.IBDatabase1.Connected:=true;
+      IBQuery3.SQL.Clear;
+      IBQuery3.SQL.Append('select * from TODO LEFT JOIN  REM_SHAPKA ON REM_SHAPKA.ID_SHAPKA=TODO.ID_SHAPKA ORDER BY TODO.ID_SHAPKA');
+
+      IBQUery3.Close;
+      IBQuery3.Open;
+      IBQuery3.first;
+
+      While not IBQuery3.Eof do
+         begin
+
+           IBQuery1.SQL.Clear;
+           IBQuery1.SQL.Append('select * from REM_USTR WHERE ID=:ID_ITEM AND ID_SHAPKA=:ID_SHAPKA');
+           IBQuery1.ParamByName('ID_ITEM').AsInteger:=IBQuery3ID_ITEM.AsInteger;
+           IBQuery1.ParamByName('ID_SHAPKA').AsInteger:=IBQuery3ID_SHAPKA.AsInteger;
+           IBQuery1.Close;
+           IBQuery1.Open;
+           IBQuery1.First;
+
+
+
+           IBQuery2.SQL.Clear;
+           IBQuery2.SQL.Append('select * from TODO WHERE CODE_USTR like :CODE_USTR AND ');
+           IBQuery2.SQL.Append('CODE_WORK like :CODE_WORK AND ID_ZAKAZ=:ID_ZAKAZ AND WORK like :WORK AND NAME_ITEM like :NAME_ITEM');
+           IBQuery2.ParamByName('CODE_USTR').AsString:=IBQuery1USTR_CODE.AsString;
+           IBQuery2.ParamByName('CODE_WORK').AsString:=IBQuery3ID_ITEM.asString;
+           IBQuery2.ParamByName('ID_ZAKAZ').AsInteger:=IBQuery3ID_SHAPKA.AsInteger;
+           IBQuery2.ParamByName('WORK').AsString:=IBQuery3TODO_NAME.AsString;
+            IBQuery2.ParamByName('NAME_ITEM').AsString:=IBQuery1USTR_NAME.AsString;
+           IBQuery2.Close;
+           IBQuery2.Open;
+           IBQuery2.First;
+
+           if IBQuery2.Eof then
+               begin
+               // Вносим новую запись в базу
+                IBQuery4.SQL.Clear;
+                IBQuery4.SQL.Append('INSERT INTO TODO (CENA, CODE_USTR, CODE_WORK, DATA_GOTOVO, ');
+                IBQuery4.SQL.Append('DATA_SOGLASOVANO, DATA_VIDANO, DATA_ZAKAZ, FL_GOTOVO, FL_SOGLASOVANO, ');
+                IBQuery4.SQL.Append('FL_UPDATE, FL_VIDANO, ID_ZAKAZ, KOL_VO, SUMMA, WORK, NAME_ITEM) VALUES (:CENA, :CODE_USTR, ');
+                IBQuery4.SQL.Append(':CODE_WORK, :DATA_GOTOVO, :DATA_SOGLASOVANO, :DATA_VIDANO, :DATA_ZAKAZ, :FL_GOTOVO, ');
+                IBQuery4.SQL.Append(':FL_SOGLASOVANO, :FL_UPDATE, :FL_VIDANO, :ID_ZAKAZ, :KOL_VO, :SUMMA, :WORK, :NAME_ITEM)');
+                IBQuery4.ParamByName('CENA').Value:=IBQuery3TODO_COST.Value;
+                IBQuery4.ParamByName('CODE_USTR').AsString:=IBQuery1USTR_CODE.AsString;
+                IBQuery4.ParamByName('CODE_WORK').AsString:=IBQuery3ID_ITEM.asString;
+                IBQuery4.ParamByName('DATA_GOTOVO').AsDateTime:=IBQuery3DAT_GOTOVO.AsDateTime;
+                IBQuery4.ParamByName('DATA_SOGLASOVANO').AsDateTime:=IBQuery3DAT_SOGL.AsDateTime;
+                IBQuery4.ParamByName('DATA_VIDANO').AsDateTime:=IBQuery1DAT_VIDANO.AsDateTime;
+                IBQuery4.ParamByName('DATA_ZAKAZ').AsDateTime:=IBQuery3DATA_GET.AsDateTime;
+                IBQuery4.ParamByName('FL_GOTOVO').AsInteger:=IBQuery3FL_GOTOVO.AsInteger;
+                IBQuery4.ParamByName('FL_SOGLASOVANO').AsInteger:=IBQuery3FL_SOGLASOVANO.AsInteger;
+                IBQuery4.ParamByName('FL_UPDATE').AsInteger:=2;
+                IBQuery4.ParamByName('FL_VIDANO').AsInteger:=IBQuery1FL_VIDANO.AsInteger;
+                IBQuery4.ParamByName('ID_ZAKAZ').AsInteger:=IBQuery3ID_SHAPKA.AsInteger;
+                IBQuery4.ParamByName('KOL_VO').AsInteger:=IBQuery3KOL_VO.AsInteger;
+                IBQuery4.ParamByName('SUMMA').Value:=IBQuery3TOTAL_COST.Value;
+                IBQuery4.ParamByName('WORK').AsString:=IBQuery3TODO_NAME.AsString;
+                IBQuery4.ParamByName('NAME_ITEM').AsString:=IBQuery1USTR_NAME.AsString;
+                IBQuery4.Close;
+                IBQuery4.Open;
+                Memo1.Lines.Append(datetostr(now)+': Для устройства с кодом '+IBQuery1USTR_CODE.AsString+' создаем запись.');
+                //unit3.DataModule3.IBTransaction2.CommitRetaining;
+
+            end else
+            begin
+            // Делаем апдейт
+                obn:=0;
+                if IBQuery2CENA.Value<>IBQuery3TODO_COST.Value then begin obn:=1; showmessage('1');end;
+
+                if IBQuery2CODE_USTR.AsString<>IBQuery1USTR_CODE.AsString then begin obn:=1; showmessage('2');end;
+                if IBQuery2CODE_WORK.AsString<>IBQuery3ID_ITEM.asString then begin obn:=1; showmessage('3');end;
+                if IBQuery2DATA_GOTOVO.AsDateTime<>IBQuery3DAT_GOTOVO.AsDateTime then begin obn:=1; showmessage('4');end;
+                if IBQuery2DATA_SOGLASOVANO.AsDateTime<>IBQuery3DAT_SOGL.AsDateTime then begin obn:=1; showmessage('5');end;
+                if IBQuery2DATA_VIDANO.AsDateTime<>IBQuery1DAT_VIDANO.AsDateTime then begin obn:=1; showmessage('6');end;
+                if IBQuery2DATA_ZAKAZ.AsDateTime<>IBQuery3DATA_GET.AsDateTime then begin obn:=1; showmessage('7');end;
+                if IBQuery2FL_GOTOVO.AsInteger<>IBQuery3FL_GOTOVO.AsInteger then begin obn:=1; showmessage('8');end;
+                if IBQuery2FL_SOGLASOVANO.AsInteger<>IBQuery3FL_SOGLASOVANO.AsInteger then begin obn:=1; showmessage('9');end;
+                if IBQuery2FL_VIDANO.AsInteger<>IBQuery1FL_VIDANO.AsInteger then begin obn:=1; showmessage('10');end;
+                if IBQuery2ID_ZAKAZ.AsInteger<>IBQuery3ID_SHAPKA.AsInteger then begin obn:=1; showmessage('11');end;
+                if IBQuery2KOL_VO.AsInteger<>IBQuery3KOL_VO.AsInteger then begin obn:=1; showmessage('12');end;
+                if IBQuery2SUMMA.Value<>IBQuery3TOTAL_COST.Value then begin obn:=1; showmessage('13');end;
+                if IBQuery2WORK.AsString<>IBQuery3TODO_NAME.AsString then begin obn:=1; showmessage('14');end;
+
+
+
+            if obn=1 then begin
+            IBQuery5.SQL.Clear;
+            IBQuery5.SQL.Append('UPDATE TODO SET CENA=:CENA, DATA_GOTOVO=:DATA_GOTOVO, ');
+            IBQuery5.SQL.Append('DATA_SOGLASOVANO=:DATA_SOGLASOVANO , DATA_VIDANO=:DATA_VIDANO, ');
+            IBQuery5.SQL.Append('DATA_ZAKAZ=:DATA_ZAKAZ, FL_GOTOVO=:FL_GOTOVO, FL_SOGLASOVANO=:FL_SOGLASOVANO, ');
+            IBQuery5.SQL.Append('FL_UPDATE=:FL_UPDATE, FL_VIDANO=:FL_VIDANO, KOL_VO=:KOL_VO, SUMMA=:SUMMA ');
+            IBQuery5.SQL.Append('WHERE CODE_USTR=:CODE_USTR AND CODE_WORK=:CODE_WORK AND ID_ZAKAZ=:ID_ZAKAZ');
+                IBQuery5.ParamByName('CENA').Value:=IBQuery3TODO_COST.Value;
+                IBQuery5.ParamByName('CODE_USTR').AsString:=IBQuery1USTR_CODE.AsString;
+                IBQuery5.ParamByName('CODE_WORK').AsString:=IBQuery3ID_ITEM.asString;
+                IBQuery5.ParamByName('DATA_GOTOVO').AsDateTime:=IBQuery3DAT_GOTOVO.AsDateTime;
+                IBQuery5.ParamByName('DATA_SOGLASOVANO').AsDateTime:=IBQuery3DAT_SOGL.AsDateTime;
+                IBQuery5.ParamByName('DATA_VIDANO').AsDateTime:=IBQuery1DAT_VIDANO.AsDateTime;
+                IBQuery5.ParamByName('DATA_ZAKAZ').AsDateTime:=IBQuery3DATA_GET.AsDateTime;
+                IBQuery5.ParamByName('FL_GOTOVO').AsInteger:=IBQuery3FL_GOTOVO.AsInteger;
+                IBQuery5.ParamByName('FL_SOGLASOVANO').AsInteger:=IBQuery3FL_SOGLASOVANO.AsInteger;
+                IBQuery5.ParamByName('FL_UPDATE').AsInteger:=2;
+                IBQuery5.ParamByName('FL_VIDANO').AsInteger:=IBQuery1FL_VIDANO.AsInteger;
+                IBQuery5.ParamByName('ID_ZAKAZ').AsInteger:=IBQuery3ID_SHAPKA.AsInteger;
+                IBQuery5.ParamByName('KOL_VO').AsInteger:=IBQuery3KOL_VO.AsInteger;
+                IBQuery5.ParamByName('SUMMA').Value:=IBQuery3TOTAL_COST.Value;
+               // IBQuery5.ParamByName('WORK').AsString:=IBQuery3TODO_NAME.AsString;
+              //  IBQuery5.ParamByName('NAME_ITEM').AsString:=IBQuery1USTR_NAME.AsString;
+                IBQuery5.Close;
+                IBQuery5.Open;
+                Memo1.Lines.Append(datetostr(now)+': Для устройства с кодом '+IBQuery1USTR_CODE.AsString+' редактируем запись.');
+                //unit3.DataModule3.IBTransaction2.CommitRetaining;
+             end else
+             Memo1.Lines.Append(datetostr(now)+': Для устройства с кодом '+IBQuery1USTR_CODE.AsString+' Обновление не требуется.');
+
+            end;
+
+
+         IBQuery3.Next;
+         end;
+
+
+     unit3.DataModule3.IBTransaction2.CommitRetaining;
+end;
+
+procedure TForm1.SpeedButton3Click(Sender: TObject);
+begin
+ IBQuery6.Close;
+ IBQuery6.Open;
+ unit3.DataModule3.IBTransaction2.CommitRetaining; 
+end;
+
+procedure TForm1.SpeedButton4Click(Sender: TObject);
+var f:textfile;
+    res, j: integer;
+    dat, num, s, p:string;
+begin
+
+   dat:=inttostr(DayOfTheYear(Now))+inttostr(HourOfTheDay(Now))+inttostr(MinuteOfTheHour(Now))+inttostr(SecondOfTheMinute(Now))+'.txt';
+ j:=0;
+ IBQuery7.SQL.Clear;
+ IBQuery7.SQL.Append('select * from TODO WHERE FL_UPDATE=:FL_UPDATE');
+ IBQuery7.ParamByName('FL_UPDATE').AsInteger:=2;
+ IBQuery7.Close;
+ IBQuery7.Open;
+ IBQuery7.First;
+ 
+ if not IBQuery7.Eof then begin
+ Memo1.Lines.Append(datetostr(now)+': Готовим файл в выгрузку');
+ AssignFile(f, dat);
+ Rewrite(F);
+ Append(F);
+ j:=2;
+ end;
+ While not IBQuery7.Eof do
+    begin
+    p:='^';
+    s:='';
+    s:=IBQuery7ID_ZAKAZ.AsString+p+IBQuery7CODE_USTR.AsString+p+IBQuery7WORK.AsString+p;
+    s:=s+IBQuery7CENA.AsString+p+IBQuery7KOL_VO.AsString+p+IBQuery7SUMMA.AsString+p;
+    s:=s+IBQuery7FL_SOGLASOVANO.AsString+p+IBQuery7FL_GOTOVO.AsString+p+IBQuery7FL_VIDANO.AsString+p;
+    s:=s+IBQuery7DATA_SOGLASOVANO.AsString+p+IBQuery7DATA_GOTOVO.AsString+p;
+    s:=s+IBQuery7DATA_VIDANO.AsString+p+IBQuery7DATA_ZAKAZ.AsString+p+IBQuery7CODE_WORK.AsString+p+IBQuery7NAME_ITEM.AsString;
+    Writeln(F,s);
+    j:=2;
+    IBQuery7.Next;
+    end;
+  if j=2 then closefile(f);
+   FTPUpload(dat);
+
+  if j=2 then begin
+  // Меняем флаги
+  if err<>1 then begin
+  IBQuery8.SQL.Clear;
+  IBQuery8.SQL.Append('UPDATE TODO SET FL_UPDATE=:FL_UPDATE WHERE FL_UPDATE=:FL_UPDATE1');
+  IBQuery8.ParamByName('FL_UPDATE').AsInteger:=1;
+  IBQuery8.ParamByName('FL_UPDATE1').AsInteger:=2;
+  IBQuery8.Close;
+  IBQuery8.Open;
+
+  Unit3.DataModule3.IBTransaction2.CommitRetaining;
+  Memo1.Lines.Append(datetostr(now)+': Отправляем файл на FTP');
+  // Отправляем файл на FTP
+   end else  Memo1.Lines.Append(datetostr(now)+': Ошибка загрузки на FTP');
+   DeleteFile(dat); // удаляем файл
+  end;
+end;
+
+procedure TForm1.SpeedButton2Click(Sender: TObject);
+begin
+Timer1.Interval:=main.TIMER*1000*60;  // В МИНУТАХ
+
+// Готовим данные для выгрузки
+            IBQuery9.SQL.Clear;
+            IBQuery9.SQL.Append('select * from OPT WHERE FL1=:FL1');
+            IBQuery9.ParamByName('FL1').AsInteger:=911;
+            IBQuery9.Close;
+            IBQuery9.Open;
+            IBQuery9.First;
+
+            main.FTPHOST:=IBQuery9FTPHOST.AsString;
+            main.FTPLOGIN:=IBQuery9FTPLOGIN.AsString;
+            main.FTPPASSWORD:=IBQuery9FTPPASSWORD.AsString;
+
+If Timer1.Enabled=true then begin
+                            SpeedButton1.Enabled:=true;
+                            SpeedButton3.Enabled:=true;
+                            SpeedButton4.Enabled:=true;
+                            SpeedButton5.Enabled:=true;
+                            Button1.Enabled:=true;
+                            SpeedButton2.Caption:='Старт таймера';
+                            Timer1.Enabled:=false;
+                            AdvSmoothLabel1.Caption.text:='Таймер остановлен';
+                            AdvSmoothLabel3.Caption.text:='Интервал: '+inttostr(main.TIMER)+' мин';
+                            end
+                            else begin
+                            SpeedButton1.Enabled:=false;
+                            SpeedButton3.Enabled:=false;
+                            SpeedButton4.Enabled:=false;
+                            SpeedButton5.Enabled:=False;
+                            Button1.Enabled:=false;
+                            SpeedButton2.Caption:='Остановка таймера';
+                            Timer1.Enabled:=true;
+                            AdvSmoothLabel1.Caption.text:='Таймер активен';
+                            AdvSmoothLabel3.Caption.text:='Интервал: '+inttostr(main.TIMER)+' мин';
+                            end;
+end;
+
+procedure TForm1.Timer1Timer(Sender: TObject);
+begin
+ Button1.Click;
+ SpeedButton4.Click;
+end;
+
+procedure TForm1.CoolTrayIcon1Click(Sender: TObject);
+begin
+CoolTrayIcon1.ShowMainForm;
+
+end;
+
+procedure TForm1.N1Click(Sender: TObject);
+begin
+CoolTrayIcon1.ShowMainForm;
+end;
+
+procedure TForm1.N3Click(Sender: TObject);
+begin
+form1.Close;
+end;
+
+procedure TForm1.SpeedButton5Click(Sender: TObject);
+var f: textfile;
+    p,s, dat:string;
+    fl: integer;
+begin
+ // выгружаем прайс-лист
+ speedbutton2.Enabled:=false;
+ fl:=1;
+ Memo1.Lines.Append(datetostr(now())+','+timetostr(time)+': Начало выгрузки прайс-листа');
+ IBQuery10.SQL.Clear;
+ IBQuery10.SQL.Append('select * from PRICE LEFT JOIN PRICE_RAZD ON PRICE.ID_RAZDEL=PRICE_RAZD.ID ORDER BY PRICE.NAME');
+ IBQuery10.Close;
+ IBQuery10.Open;
+ IBQuery10.First;
+ dat:='price.dat';
+ AssignFile (F,dat);
+ p:='^';
+ if NOT IBQuery10.Eof then begin
+                            fl:=2;
+                            Rewrite (F);
+                            Append(F);
+                           end;
+ While not IBQuery10.Eof do
+   Begin
+    s:='';
+    s:=s+IBQuery10RAZDEL.AsString+p+IBQuery10ID.AsString+p+IBQuery10NAME.AsString+p+IBQuery10COST.AsString;
+    Writeln(f,s);
+
+    IBQuery10.Next;
+   End;
+  CloseFile(f);
+
+
+  if fl=2 then begin
+                Memo1.Lines.Append(datetostr(now())+','+timetostr(time)+': выгружаем прайс-лист на FTP');
+                FTPUpload(dat);
+                DeleteFile(dat); // удаляем файл
+               end;
+ speedbutton2.Enabled:=true;
+end;
+
+end.
